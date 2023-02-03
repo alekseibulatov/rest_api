@@ -1,5 +1,8 @@
 import org.junit.jupiter.api.Test;
 
+import static io.restassured.RestAssured.get;
+import static org.hamcrest.Matchers.is;
+
 public class SelenoidTests {
      /*
         1. Make request to https://selenoid.autotests.cloud/status
@@ -11,8 +14,8 @@ public class SelenoidTests {
 
     @Test
     public void checkTotal() {
-
+        get("https://selenoid.autotests.cloud/status")
+                .then()
+                .body("total", is(20));
     }
-
-
 }
