@@ -18,4 +18,12 @@ public class SelenoidTests {
                 .then()
                 .body("total", is(20));
     }
+
+    @Test
+    public void checkTotalWithStatus() {
+        get("https://selenoid.autotests.cloud/status")
+                .then()
+                .statusCode(200)
+                .body("total", is(20));
+    }
 }
