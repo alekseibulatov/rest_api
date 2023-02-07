@@ -1,12 +1,12 @@
-package qa.guru;
+package qa.guru.hwork;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-
 import static io.restassured.RestAssured.given;
-import static io.restassured.http.ContentType.JSON;
 import static org.hamcrest.Matchers.*;
+import static qa.guru.hwork.specs.LoginSpecs.loginRequestSpec;
+import static qa.guru.hwork.specs.LoginSpecs.responseSpecification;
 
 
 public class ReqresInApiTests {
@@ -14,13 +14,11 @@ public class ReqresInApiTests {
     @Test
     @DisplayName("Проверка  что на 2 странице в body содержит 6 пользователей")
     public void requestGetListUser() {
-        given()
-                .log().uri()
+        given(loginRequestSpec)
                 .when()
-                .get("https://reqres.in/api/users?page=2")
+                .get("/users?page=2")
                 .then()
-                .log().all()
-                .statusCode(200)
+                .spec(responseSpecification(200))
                 .body("page", is(2))
                 .body("size()", equalTo(6));
     }
@@ -28,29 +26,24 @@ public class ReqresInApiTests {
     @Test
     @DisplayName("Проверка отсутвия пользователя в списке")
     public void requestGetSingleNotFound() {
-        given()
-                .log().uri()
+        given(loginRequestSpec)
                 .when()
-                .get("https://reqres.in/api/unknown/23")
+                .get("/unknown/23")
                 .then()
-                .log().body()
-                .statusCode(404);
+                .spec(responseSpecification(404));
     }
 
     @Test
     @DisplayName("Проверка изменения пользователя")
-      public void requestPatch() {
+    public void requestPatch() {
         String data = "{ \"name\": \"morpheus\", \"job\": \"zion resident\" }";
 
-        given()
-                .log().all()
-                .contentType(JSON)
+        given(loginRequestSpec)
                 .body(data)
                 .when()
-                .patch("https://reqres.in/api/users/2")
+                .patch("/users/2")
                 .then()
-                .log().all()
-                .statusCode(200)
+                .spec(responseSpecification(200))
                 .body("name", is("morpheus"))
                 .body("job", is("zion resident"))
                 .body("updatedAt", is(notNullValue()));
@@ -58,14 +51,12 @@ public class ReqresInApiTests {
 
     @Test
     @DisplayName("Проверка удаления пользователя")
-     public void requestDelete() {
-        given()
-                .log().uri()
+    public void requestDelete() {
+        given(loginRequestSpec)
                 .when()
-                .delete("https://reqres.in/api/users/2")
+                .delete("/users/2")
                 .then()
-                .log().all()
-                .statusCode(204);
+                .spec(responseSpecification(204));
     }
 
     @Test
@@ -73,16 +64,12 @@ public class ReqresInApiTests {
     public void registerTest() {
         String data = "{ \"email\": \"eve.holt@reqres.in\", \"password\": \"pistol\" }";
 
-        given()
-                .log().uri()
-                .contentType(JSON)
+        given(loginRequestSpec)
                 .body(data)
                 .when()
-                .post("https://reqres.in/api/register")
+                .post("/register")
                 .then()
-                .log().status()
-                .log().body()
-                .statusCode(200)
+                .spec(responseSpecification(200))
                 .body("id", is(4))
                 .body("token", is("QpwL5tke4Pnpja7X4"));
     }
