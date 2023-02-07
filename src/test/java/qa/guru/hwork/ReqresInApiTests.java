@@ -2,8 +2,12 @@ package qa.guru.hwork;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import qa.guru.hwork.models.ListUsersModel;
+import qa.guru.hwork.models.RegisterUserModel;
+import qa.guru.hwork.models.UpdateUserModel;
 
 import static io.restassured.RestAssured.given;
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
 import static qa.guru.hwork.specs.LoginSpecs.loginRequestSpec;
 import static qa.guru.hwork.specs.LoginSpecs.responseSpecification;
@@ -14,13 +18,15 @@ public class ReqresInApiTests {
     @Test
     @DisplayName("Проверка  что на 2 странице в body содержит 6 пользователей")
     public void requestGetListUser() {
-        given(loginRequestSpec)
+        ListUsersModel listUsers = given(loginRequestSpec)
                 .when()
                 .get("/users?page=2")
                 .then()
                 .spec(responseSpecification(200))
-                .body("page", is(2))
-                .body("size()", equalTo(6));
+                .body("data.findAll{it.first_name}.first_name.flatten()", hasItem("Lindsay"))
+                .extract().as(ListUsersModel.class);
+        assertThat(listUsers.getPage(), is(2));
+        assertThat(listUsers.getData().size(), is(6));
     }
 
     @Test
@@ -38,15 +44,16 @@ public class ReqresInApiTests {
     public void requestPatch() {
         String data = "{ \"name\": \"morpheus\", \"job\": \"zion resident\" }";
 
-        given(loginRequestSpec)
+        UpdateUserModel updateUserModel = given(loginRequestSpec)
                 .body(data)
                 .when()
                 .patch("/users/2")
                 .then()
                 .spec(responseSpecification(200))
-                .body("name", is("morpheus"))
-                .body("job", is("zion resident"))
-                .body("updatedAt", is(notNullValue()));
+                .extract().as(UpdateUserModel.class);
+        assertThat(updateUserModel.getName(), is("morpheus"));
+        assertThat(updateUserModel.getJob(), is("zion resident"));
+        assertThat(updateUserModel.getUpdatedAt(), is(notNullValue()));
     }
 
     @Test
@@ -64,13 +71,14 @@ public class ReqresInApiTests {
     public void registerTest() {
         String data = "{ \"email\": \"eve.holt@reqres.in\", \"password\": \"pistol\" }";
 
-        given(loginRequestSpec)
+        RegisterUserModel registerUserModel = given(loginRequestSpec)
                 .body(data)
                 .when()
                 .post("/register")
                 .then()
                 .spec(responseSpecification(200))
-                .body("id", is(4))
-                .body("token", is("QpwL5tke4Pnpja7X4"));
+                .extract().as(RegisterUserModel.class);
+        assertThat(registerUserModel.getId(), is(4));
+        assertThat(registerUserModel.getToken(), is("QpwL5tke4Pnpja7X4"));
     }
 }
