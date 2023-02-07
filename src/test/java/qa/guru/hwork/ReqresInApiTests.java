@@ -2,9 +2,7 @@ package qa.guru.hwork;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import qa.guru.hwork.models.ListUsersModel;
-import qa.guru.hwork.models.RegisterUserModel;
-import qa.guru.hwork.models.UpdateUserModel;
+import qa.guru.hwork.models.*;
 
 import static io.restassured.RestAssured.given;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -42,7 +40,9 @@ public class ReqresInApiTests {
     @Test
     @DisplayName("Проверка изменения пользователя")
     public void requestPatch() {
-        String data = "{ \"name\": \"morpheus\", \"job\": \"zion resident\" }";
+        CreateUpdateUserModel data = new CreateUpdateUserModel();
+        data.setName("morpheus");
+        data.setJob("zion resident");
 
         UpdateUserModel updateUserModel = given(loginRequestSpec)
                 .body(data)
@@ -69,7 +69,9 @@ public class ReqresInApiTests {
     @Test
     @DisplayName("Проверка регистрации пользователя")
     public void registerTest() {
-        String data = "{ \"email\": \"eve.holt@reqres.in\", \"password\": \"pistol\" }";
+        CreateRegisterUserModel data = new CreateRegisterUserModel();
+        data.setEmail("eve.holt@reqres.in");
+        data.setPassword("pistol");
 
         RegisterUserModel registerUserModel = given(loginRequestSpec)
                 .body(data)

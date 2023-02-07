@@ -19,5 +19,5 @@ public class ListUsersModel {
     @JsonProperty("total_pages")
     private String totalPages;
 
-   ArrayList<UserModel> data;
+    private ArrayList<UserModel> data;
 }

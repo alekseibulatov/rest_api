@@ -8,5 +8,5 @@ import lombok.Data;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class UpdateUserModel {
 
-    String name, job, updatedAt;
+    private String name, job, updatedAt;
 }

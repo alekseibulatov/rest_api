@@ -6,9 +6,7 @@ import lombok.Data;
 
 @Data
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class RegisterUserModel {
+public class CreateUpdateUserModel {
 
-    private Integer id;
-
-    private String token;
+   private String name, job;
 }
