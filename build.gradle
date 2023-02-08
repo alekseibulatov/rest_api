@@ -37,7 +37,6 @@ dependencies {
             'com.fasterxml.jackson.core:jackson-databind:2.14.1',
             'org.slf4j:slf4j-simple:2.0.6',
             'io.qameta.allure:allure-rest-assured:2.19.0',
-
     )
 }
 
@@ -50,5 +49,11 @@ tasks.withType(Test) {
             events "started", "skipped", "failed", "standard_error", "standard_out"
             exceptionFormat "short"
         }
+    }
+}
+
+task api_tests(type: Test) {
+    useJUnitPlatform {
+        includeTags("API")
     }
 }

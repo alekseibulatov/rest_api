@@ -2,6 +2,7 @@ package qa.guru.hwork;
 
 
 import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import qa.guru.hwork.models.*;
 
@@ -15,6 +16,7 @@ import static qa.guru.hwork.specs.LoginSpecs.responseSpecification;
 public class ReqresInApiTests {
 
     @Test
+    @Tag("API")
     @DisplayName("Проверка  что на 2 странице в body содержит 6 пользователей")
     public void requestGetListUser() {
         ListUsersModel listUsers = given(loginRequestSpec)
@@ -29,6 +31,7 @@ public class ReqresInApiTests {
     }
 
     @Test
+    @Tag("API")
     @DisplayName("Проверка отсутвия пользователя в списке")
     public void requestGetSingleNotFound() {
         given(loginRequestSpec)
@@ -39,6 +42,7 @@ public class ReqresInApiTests {
     }
 
     @Test
+    @Tag("API")
     @DisplayName("Проверка изменения пользователя")
     public void requestPatch() {
         CreateUpdateUserModel data = new CreateUpdateUserModel();
@@ -58,6 +62,7 @@ public class ReqresInApiTests {
     }
 
     @Test
+    @Tag("API")
     @DisplayName("Проверка удаления пользователя")
     public void requestDelete() {
         given(loginRequestSpec)
@@ -68,6 +73,7 @@ public class ReqresInApiTests {
     }
 
     @Test
+    @Tag("API")
     @DisplayName("Проверка регистрации пользователя")
     public void registerTest() {
         CreateRegisterUserModel data = new CreateRegisterUserModel();
